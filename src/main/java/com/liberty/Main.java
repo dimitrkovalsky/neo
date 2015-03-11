@@ -3,9 +3,10 @@ package com.liberty;
 import com.graphaware.reco.generic.context.Mode;
 import com.graphaware.reco.generic.result.Recommendation;
 import com.graphaware.reco.neo4j.engine.Neo4jTopLevelDelegatingEngine;
-import com.liberty.services.WordsComputingEngine;
+import com.liberty.reco.FriendsRecommendationEngine;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.neo4j.graphdb.Node;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.neo4j.rest.graphdb.RestGraphDatabase;
 
 import java.util.List;
 
@@ -16,23 +17,19 @@ import java.util.List;
  */
 public class Main {
     public static void main(String[] args) {
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
-//        System.out.println("Context read");
-        GalaxyService service = context.getBean(GalaxyService.class);
-//        //        context.getBean(GalaxyService.class).getAllWorlds();
-//        service.makeSomeWorlds();
-//
-//        for (World w : service.getAllWorlds())
-//            System.out.println(w);
-//        System.out.println("End");
+        //ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        //NodeService service = context.getBean(NodeService.class);
+        Neo4jTopLevelDelegatingEngine recommendationEngine =  new FriendsRecommendationEngine();
 
-        Node node = service.getNode(17);
-        System.out.println(node);
-        Neo4jTopLevelDelegatingEngine engine = new WordsComputingEngine();
-        List<Recommendation<Node>> recommend = engine.recommend(node, Mode.REAL_TIME, 2);
-        for (Recommendation<Node> nodeRecommendation : recommend) {
-            System.out.println(nodeRecommendation);
-        }
+        GraphDatabaseService graphDb=new RestGraphDatabase("http://localhost:7474/db/data");
+        Node node = graphDb.getNodeById(19); // Luanne from github docs
+        List<Recommendation<Node>> recommend = recommendationEngine.recommend(node, Mode.REAL_TIME, 4);
+        if(recommend.size() != 0)
+            for(Recommendation<Node> n : recommend)
+                System.out.println(n);
+        else
+            System.out.println("Empty");
+
     }
 
 }

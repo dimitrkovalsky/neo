@@ -30,6 +30,6 @@
     <bean id="graphDatabaseFactory" name="graphDatabaseFactory" class="org.neo4j.graphdb.factory.GraphDatabaseFactory"/>
 
 
-    <bean id="galaxyService" name="galaxyService" class="com.liberty.GalaxyService"/>
+    <bean id="nodeService"  class="com.liberty.services.NodeService"/>
 
 </beans>
