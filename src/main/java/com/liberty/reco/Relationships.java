@@ -8,5 +8,5 @@ import org.neo4j.graphdb.RelationshipType;
  * Time: 16:03
  */
 public enum Relationships implements RelationshipType {
-    FRIEND_OF, LIVES_IN
+    FRIEND_OF, LIVES_IN, REACHABLE_BY_ROCKET
 }

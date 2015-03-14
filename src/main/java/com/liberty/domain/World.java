@@ -4,6 +4,7 @@ import org.neo4j.graphdb.Direction;
 import org.springframework.data.neo4j.annotation.*;
 import org.springframework.data.neo4j.support.index.IndexType;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
@@ -20,6 +21,14 @@ public class World {
     // Uses legacy index mechanism
     @Indexed(indexType = IndexType.SIMPLE)
     private int moons;
+
+    public Set<World> getReachableByRocket() {
+        return reachableByRocket;
+    }
+
+    public void setReachableByRocket(Set<World> reachableByRocket) {
+        this.reachableByRocket = reachableByRocket;
+    }
 
     @Fetch
     @RelatedTo(type = REACHABLE_BY_ROCKET, direction = Direction.BOTH)
@@ -45,8 +54,11 @@ public class World {
         return moons;
     }    
 
-    public void addRocketRouteTo(World otherWorld) {
+    public World addRocketRouteTo(World otherWorld) {
+        if(reachableByRocket == null)
+            reachableByRocket = new HashSet<>();
     	reachableByRocket.add(otherWorld);
+        return this;
     }
     
     public boolean canBeReachedFrom(World otherWorld) {

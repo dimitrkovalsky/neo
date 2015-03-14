@@ -32,4 +32,6 @@
 
     <bean id="nodeService"  class="com.liberty.services.NodeService"/>
 
+    <bean id="galaxyService"  class="com.liberty.services.GalaxyService"/>
+
 </beans>
